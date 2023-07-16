@@ -98,7 +98,7 @@ class ExtraItemController extends Controller
         try {
             $extra_item = ExtraItem::findOrFail($id);
             $extra_item->delete();
-            return $thi->success('Extra Item DELETED successfully');
+            return $this->success('Extra Item DELETED successfully');
 
         } catch (Exception $exception) {
             if ($exception instanceof ModelNotFoundException) {
