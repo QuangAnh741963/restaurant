@@ -11,17 +11,17 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->comment('Hóa đơn');
-            $table->string('id', 10)->primary()->comment('Mã đơn hàng gồm 10 ký tự (21HJ4PR59E)');
+            $table->string('id', 11)->primary()->comment('Mã đơn hàng gồm 10 ký tự (21HJ4PR59E)');
             $table->integer('state_id')->index('order_order_state_id_fk')->comment('Trạng thái đơn hàng');
             $table->dateTime('created_at')->useCurrent()->comment('Thời gian tạo đơn');
-            $table->dateTime('modified_at')->nullable();
-            $table->integer('total_bill')->comment('Tổng giá tiền của đơn');
+            $table->dateTime('modified_at')->useCurrent()->comment('Thời gian chỉnh sửa đơn');
+            $table->integer('total_bill')->nullable()->comment('Tổng giá tiền của đơn');
             $table->integer('customer_id')->nullable()->index('order_customer_id_fk')->comment('Khóa ngoài của bảng customer');
-            $table->string('payment', 256)->comment('Hình thức thanh toán');
+            $table->string('payment', 256)->nullable()->comment('Hình thức thanh toán');
         });
     }
 
@@ -30,7 +30,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('orders');
     }
