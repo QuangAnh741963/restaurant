@@ -33,13 +33,13 @@ class ExtraItemController extends Controller
     public function store(Request $request)
     {
         try {
-            $extra_items = new ExtraItem();
-            $extra_items->name = $request->input('name');
-            $extra_items->price = $request->input('price');
-            $extra_items->unit = $request->input('unit');
+            $extra_item = new ExtraItem();
+            $extra_item->name = $request->input('name');
+            $extra_item->price = $request->input('price');
+            $extra_item->unit = $request->input('unit');
 
-            $extra_items->save();
-            return $this->success('Add Extra Item successfully', $extra_items);
+            $extra_item->save();
+            return $this->success('Add Extra Item successfully', $extra_item);
 
         } catch (Exception $exception) {
             return $this->failure($exception->getMessage());
@@ -68,19 +68,19 @@ class ExtraItemController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $extra_items = ExtraItem::findOrFail($id);
+            $extra_item = ExtraItem::findOrFail($id);
             if($request->has('name')) {
-                $extra_items->name = $request->input('name');
+                $extra_item->name = $request->input('name');
             }
             if($request->has('price')) {
-                $extra_items->price = $request->input('price');
+                $extra_item->price = $request->input('price');
             }
             if($request->has('unit')) {
-                $extra_items->unit = $request->input('unit');
+                $extra_item->unit = $request->input('unit');
             }
 
-            $extra_items->save();
-            return $this->success('Extra Item updated successfully', $extra_items);
+            $extra_item->save();
+            return $this->success('Extra Item updated successfully', $extra_item);
 
         } catch (Exception $exception) {
             if ($exception instanceof ModelNotFoundException) {
@@ -96,9 +96,9 @@ class ExtraItemController extends Controller
     public function destroy(string $id)
     {
         try {
-            $extra_items = ExtraItem::findOrFail($id);
-            $extra_items->delete();
-            return $this->success('Extra Item DELETED successfully');
+            $extra_item = ExtraItem::findOrFail($id);
+            $extra_item->delete();
+            return $thi->success('Extra Item DELETED successfully');
 
         } catch (Exception $exception) {
             if ($exception instanceof ModelNotFoundException) {

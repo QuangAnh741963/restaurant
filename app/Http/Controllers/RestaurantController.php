@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Restaurant;
+use App\Traits\RespondsWithHttpStatus;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class RestaurantController extends Controller
 {
+    use RespondsWithHttpStatus;
     /**
      * GET ALL RESTAURANT
      */

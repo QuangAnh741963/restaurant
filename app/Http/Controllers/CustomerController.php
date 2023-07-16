@@ -31,8 +31,8 @@ class CustomerController extends Controller
             $query->where('email', $request->get('email'));
         }
 
-        $customer = $query->get();
-        return $this->success('Get Customers Successfully',$customer, 200);
+        $customers = $query->get();
+        return $this->success('Get Customers Successfully',$customers);
     }
 
     /**
