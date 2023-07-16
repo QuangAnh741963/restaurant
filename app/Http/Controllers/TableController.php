@@ -16,6 +16,28 @@ class TableController extends Controller
     {
         return Table::all();
     }
+    /**
+     * GET ALL TABLE Open_State
+     */
+    public function getTableOpen() {
+        $tables = Table::where('state','1')->get();
+
+        return response()->json([
+            'message' => 'Table List Open',
+            'data' => $tables
+        ]);
+    }
+    /**
+     * GET ALL TABLE Close_State
+     */
+    public function getTableClose() {
+        $tables = Table::where('state','0')->get();
+
+        return response()->json([
+            'message' => 'Table List Close',
+            'data' => $tables
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.
