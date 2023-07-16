@@ -23,11 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/table/open', [TableController::class, 'getTableOpen']);
-Route::get('/table/close', [TableController::class, 'getTableClose']);
 Route::apiResource('/table', TableController::class);
-Route::put('/table/updateOpen/{id}', [TableController::class, 'updateStateOpen']);
-Route::put('/table/updateClose/{id}', [TableController::class, 'updateStateClose']);
 
 Route::apiResource('/item', ItemController::class);
 

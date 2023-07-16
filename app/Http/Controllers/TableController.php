@@ -3,41 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Table;
+use App\Traits\RespondsWithHttpStatus;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class TableController extends Controller
 {
+    use RespondsWithHttpStatus;
+
     /**
      * GET ALL LIST TABLE
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Table::all();
-    }
-    /**
-     * GET ALL TABLE Open_State
-     */
-    public function getTableOpen() {
-        $tables = Table::where('state','1')->get();
+        $query = Table::query();
 
-        return response()->json([
-            'message' => 'Table List Open',
-            'data' => $tables
-        ]);
-    }
-    /**
-     * GET ALL TABLE Close_State
-     */
-    public function getTableClose() {
-        $tables = Table::where('state','0')->get();
+        // Tìm kiếm theo state
+        if ($request->has('state')) {
+            $state = $request->get('state');
+            $query->where('state', $state);
+        }
 
-        return response()->json([
-            'message' => 'Table List Close',
-            'data' => $tables
-        ]);
+        $tables = $query->get();
+        return $this->success('Get all tables successfully.', $tables);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -65,11 +56,34 @@ class TableController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * UPDATE TABLE state AND quantity BY Id
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $table = Table::findOrFail($id);
+
+            // Update State
+            if ($request->has('state')) {
+                $table->state = $request->get('state');
+            }
+
+            // Update quantity
+            if ($request->has('quantity')) {
+                $table->quantity = $request->get('quantity');
+            }
+
+            $table->save();
+
+            return $this->success('Update Table Successfully', $table);
+        } catch (Exception $exception) {
+            if ($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                    'message' => 'TABLE NOT FOUND'
+                ], 404);
+            }
+            return $exception->getMessage();
+        }
     }
 
     /**
@@ -79,48 +93,5 @@ class TableController extends Controller
     {
         //
     }
-    /**
-     * UPDATE TABLE STATE 0->1
-     */
-    public function updateStateOpen(string $id) {
-        try {
-            $table = Table::findOrFail($id);
-            $table->state = 1;
-            $table->save();
 
-            return response()->json([
-                'message' => 'Update Table to OPEN Success',
-                'data' => $table
-            ]);
-        } catch (Exception $exception) {
-            if ($exception instanceof ModelNotFoundException) {
-                return response()->json([
-                    'message' => 'TABLE NOT FOUND'
-                ], 404);
-            }
-            return $exception->getMessage();
-        }
-    }
-    /**
-     * UPDATE TABLE STATE 1->0
-     */
-    public function updateStateClose(string $id) {
-        try {
-            $table = Table::findOrFail($id);
-            $table->state = 0;
-            $table->save();
-
-            return response()->json([
-                'message' => 'Update Table to CLOSE Success',
-                'data' => $table
-            ]);
-        } catch (Exception $exception) {
-            if ($exception instanceof ModelNotFoundException) {
-                return response()->json([
-                    'message' => 'TABLE NOT FOUND'
-                ], 404);
-            }
-            return $exception->getMessage();
-        }
-    }
 }
