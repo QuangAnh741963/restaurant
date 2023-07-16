@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ExtraItem;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ExtraItemController extends Controller
@@ -32,7 +33,11 @@ class ExtraItemController extends Controller
         try {
             return ExtraItem::findOrFail($id);
         } catch (Exception $exception) {
-//            if($exception instanceof )
+            if($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                    'message' => 'EXTRA ITEM NOT FOUND'
+                ],404);
+            }
         }
     }
 
