@@ -28,7 +28,7 @@ class ExtraItemController extends Controller
     }
 
     /**
-     *    ADD ITEM
+     *    ADD EXTRA ITEM
      */
     public function store(Request $request)
     {
@@ -63,15 +63,21 @@ class ExtraItemController extends Controller
     }
 
     /**
-     *     UPDATE ITEM
+     *     UPDATE EXTRA ITEM
      */
     public function update(Request $request, string $id)
     {
         try {
             $extra_items = ExtraItem::findOrFail($id);
-            $extra_items->name = $request->input('name');
-            $extra_items->price = $request->input('price');
-            $extra_items->unit = $request->input('unit');
+            if($request->has('name')) {
+                $extra_items->name = $request->input('name');
+            }
+            if($request->has('price')) {
+                $extra_items->price = $request->input('price');
+            }
+            if($request->has('unit')) {
+                $extra_items->unit = $request->input('unit');
+            }
 
             $extra_items->save();
             return $this->success('Extra Item updated successfully', $extra_items);
@@ -85,7 +91,7 @@ class ExtraItemController extends Controller
     }
 
     /**
-     * DELETE ITEM
+     * DELETE EXTRA ITEM
      */
     public function destroy(string $id)
     {

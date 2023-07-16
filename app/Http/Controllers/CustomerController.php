@@ -77,9 +77,15 @@ class CustomerController extends Controller
     {
         try {
             $customer = Customer::findOrFail($id);
-            $customer->name = $request->input('name');
-            $customer->phone = $request->input('phone');
-            $customer->email = $request->input('email');
+            if($request->has('name')) {
+                $customer->name = $request->input('name');
+            }
+            if($request->has('phone')) {
+                $customer->phone = $request->input('phone');
+            }
+            if($request->has('email')) {
+                $customer->email = $request->input('email');
+            }
 
             $customer->save();
             return $this->success('Customer updated successfully', $customer);

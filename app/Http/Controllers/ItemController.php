@@ -19,7 +19,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     *  ADD ITEM
      */
     public function store(Request $request)
     {
@@ -41,7 +41,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     *    UPDATE ITEM
      */
     public function update(Request $request, string $id)
     {
@@ -49,7 +49,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     *   DELETE ITEM
      */
     public function destroy(string $id)
     {
