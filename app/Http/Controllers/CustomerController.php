@@ -44,9 +44,13 @@ class CustomerController extends Controller
             $customer = new Customer();
             $customer->name = $request->input('name');
             $customer->phone = $request->input('phone');
-            $customer->email = $request->input()
-        } catch (Exception $exception) {
+            $customer->email = $request->input('email');
 
+            $customer->save();
+
+            return $this->success('Customer created successfully', $customer, 201);
+        } catch (Exception $exception) {
+            return $this->failure($exception->getMessage());
         }
     }
 
@@ -67,11 +71,25 @@ class CustomerController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * UPDATE CUSTOMER
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $customer = Customer::findOrFail($id);
+            $customer->name = $request->input('name');
+            $customer->phone = $request->input('phone');
+            $customer->email = $request->input('email');
+
+            $customer->save();
+            return $this->success('Customer updated successfully', $customer);
+
+        } catch (Exception $exception) {
+            if ($exception instanceof ModelNotFoundException) {
+                return $this->failure('Customer NOT FOUND', 404);
+            }
+            return $this->failure($exception->getMessage(), 404);
+        }
     }
 
     /**
@@ -79,6 +97,16 @@ class CustomerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $customer = Customer::findOrFail($id);
+            $customer->delete();
+            return $this->success('Customer DELETED successfully');
+
+        } catch (Exception $exception) {
+            if ($exception instanceof ModelNotFoundException) {
+                return $this->failure('Customer NOT FOUND', 404);
+            }
+            return $this->failure($exception->getMessage(), 404);
+        }
     }
 }
