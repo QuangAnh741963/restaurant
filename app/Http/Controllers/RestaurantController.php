@@ -20,7 +20,7 @@ class RestaurantController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     *   ADD RESTAURANT
      */
     public function store(Request $request)
     {
@@ -44,15 +44,38 @@ class RestaurantController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     *     UPDATE RESTAURANT
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $restaurant = Restaurant::findOrFail($id);
+            if($request->has('name')) {
+                $restaurant->name = $request->input('name');
+            }
+            if($request->has('tax_code')) {
+                $restaurant->tax_code = $request->input('tax_code');
+            }
+            if($request->has('name_leader')) {
+                $restaurant->name_leader = $request->input('name_leader');
+            }
+            if($request->has('address')) {
+                $restaurant->address = $request->input('address');
+            }
+
+            $restaurant->save();
+            return $this->success('Restaurant updated successfully', $restaurant);
+
+        } catch (Exception $exception) {
+            if ($exception instanceof ModelNotFoundException) {
+                return $this->failure('Restaurant NOT FOUND', 404);
+            }
+            return $this->failure($exception->getMessage(), 404);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     *     DELETE RESTAURANT
      */
     public function destroy(string $id)
     {
