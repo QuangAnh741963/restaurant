@@ -44,7 +44,7 @@ class CustomerController extends Controller
             $customer = new Customer();
             $customer->name = $request->input('name');
             $customer->phone = $request->input('phone');
-            $customer->email = $request->input()
+            $customer->email = $request->input();
         } catch (Exception $exception) {
 
         }

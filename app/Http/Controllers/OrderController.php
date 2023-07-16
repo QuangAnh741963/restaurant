@@ -25,6 +25,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // Lấy dữ liệu trong request và import vào các biến
         $items = $request->has('items') ? $request->get('items') : null;
 
         $extra_items = $request->has('extra_items') ? $request->get('extra_items') : null;
@@ -33,10 +34,12 @@ class OrderController extends Controller
 
         $customer = $request->has('customer') ? $request->get('customer') : null;
 
-
+        // Tạo đối tượng order
         $order = new Order();
 
+        // Tạo ngẫu nhiên 1 chuỗi để làm ID
         $order->id = strtoupper(fake()->bothify('**********'));
+
         $order->order_state()->associate(OrderState::find(1));
 
         $order->save();
