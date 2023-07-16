@@ -13,7 +13,7 @@ class TableSeeder extends Seeder
      */
     public function run(): void
     {
-        $tableId = ['A01', 'A02', 'A03', 'B01', 'B02', 'B03'];
+        $tableId = ['A01', 'A02', 'A03', 'A04', 'A05', 'B01', 'B02', 'B03', 'C01', 'C02', 'C03'];
 
         foreach ($tableId as $id) {
             Table::create([

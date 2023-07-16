@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
+use App\Models\Restaurant;
 use Exception;
-use http\Env\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
-class ItemController extends Controller
+class RestaurantController extends Controller
 {
     /**
-     * GET ALL ITEM
+     * GET ALL RESTAURANT
      */
     public function index()
     {
-        return Item::all();
+        return Restaurant::all();
     }
 
     /**
@@ -27,16 +26,18 @@ class ItemController extends Controller
     }
 
     /**
-     * GET ITEM BY ID
+     * GET RESTAURANT BY ID
      */
-    public function show(int $id)
+    public function show(string $id)
     {
         try {
-            return Item::findOrFail($id);
-        } catch (Exception $exception) {
-            return response()->json([
-                'message' => 'FOOD NOT FOUND'
-            ], 404);
+            return Restaurant::findOrFail($id);
+        } catch (Exception $exception){
+            if($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                    'message' =>  'NOT FOUND INFO Restaurant'
+                ], 404);
+            }
         }
     }
 

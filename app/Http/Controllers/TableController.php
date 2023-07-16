@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class TableController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * GET ALL LIST TABLE
      */
     public function index()
     {
@@ -26,7 +26,7 @@ class TableController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * GET TABLE BY ID
      */
     public function show(string $id)
     {
@@ -56,5 +56,49 @@ class TableController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    /**
+     * UPDATE TABLE STATE 0->1
+     */
+    public function updateStateOpen(string $id) {
+        try {
+            $table = Table::findOrFail($id);
+            $table->state = 1;
+            $table->save();
+
+            return response()->json([
+                'message' => 'Update Table to OPEN Success',
+                'data' => $table
+            ]);
+        } catch (Exception $exception) {
+            if ($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                    'message' => 'TABLE NOT FOUND'
+                ], 404);
+            }
+            return $exception->getMessage();
+        }
+    }
+    /**
+     * UPDATE TABLE STATE 1->0
+     */
+    public function updateStateClose(string $id) {
+        try {
+            $table = Table::findOrFail($id);
+            $table->state = 0;
+            $table->save();
+
+            return response()->json([
+                'message' => 'Update Table to CLOSE Success',
+                'data' => $table
+            ]);
+        } catch (Exception $exception) {
+            if ($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                    'message' => 'TABLE NOT FOUND'
+                ], 404);
+            }
+            return $exception->getMessage();
+        }
     }
 }

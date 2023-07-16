@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ExtraItemController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * GET ALL EXTRA_ITEM
      */
     public function index()
     {
@@ -26,7 +26,7 @@ class ExtraItemController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * GET EXTRA_ITEM BY ID
      */
     public function show(string $id)
     {
