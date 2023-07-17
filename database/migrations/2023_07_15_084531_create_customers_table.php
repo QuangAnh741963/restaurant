@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->comment('Thông tin khách hàng');
             $table->integer('id', true);
-            $table->string('name', 256)->comment('Họ tên khách hàng');
+            $table->string('name', 256)->nullable()->comment('Họ tên khách hàng');
             $table->string('phone', 256)->nullable()->comment('Số điện thoại khách hàng');
-            $table->string('email', 256)->nullable()->comment('Email của khách hàng');
+            $table->string('email', 256)->comment('Email của khách hàng')->unique();
         });
     }
 

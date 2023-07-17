@@ -7,6 +7,7 @@ use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TableController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,8 @@ Route::apiResource('/item', ItemController::class);
 
 Route::apiResource('/extra_item', ExtraItemController::class);
 
-Route::apiResource('/customer',CustomerController::class);
+Route::apiResource('/customer', CustomerController::class);
 
-Route::apiResource('/restaurant',RestaurantController::class);
+Route::apiResource('/restaurant', RestaurantController::class);
+
+Route::apiResource('/order', OrderController::class);
