@@ -66,6 +66,11 @@ class OrderController extends Controller
                                         'quantity_not_use' => 0]]
             );
         }
+//        foreach ($extra_items as $extra_item) {
+//            $order->extra_items()->attach(
+//                [$extra_item['id'] => ['quantity' => $extra_item['quantity']]]
+//            );
+//        }
 
         $customer = Customer::firstOrCreate(
             ['email' => $customer['email']],
@@ -83,6 +88,7 @@ class OrderController extends Controller
     public function show(string $id)
     {
 
+        //
     }
 
     /**
