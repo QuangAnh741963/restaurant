@@ -55,6 +55,8 @@ class Order extends Model
 		'payment'
 	];
 
+    protected $with = ['tables', 'items', 'extra_items', 'customer'];
+
 	public function customer(): BelongsTo
     {
 		return $this->belongsTo(Customer::class);

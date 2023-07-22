@@ -19,7 +19,7 @@ class TableSeeder extends Seeder
             Table::create([
                 'id' => $id,
                 'quantity' => fake()->randomElement([4, 6]),
-                'state' => fake()->boolean()
+                'available' => true
             ]);
         }
     }

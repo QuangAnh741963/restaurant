@@ -20,9 +20,9 @@ class TableController extends Controller
         $query = Table::query();
 
         // Tìm kiếm theo state
-        if ($request->has('state')) {
-            $state = $request->get('state');
-            $query->where('state', $state);
+        if ($request->has('available')) {
+            $available = $request->get('available');
+            $query->where('available', $available);
         }
 
         $tables = $query->get();
@@ -63,9 +63,9 @@ class TableController extends Controller
         try {
             $table = Table::findOrFail($id);
 
-            // Update State
-            if ($request->has('state')) {
-                $table->state = $request->get('state');
+            // Update available
+            if ($request->has('available')) {
+                $table->available = $request->get('available');
             }
 
             // Update quantity

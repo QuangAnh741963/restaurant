@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @property string $id
  * @property int $quantity
- * @property string $state
+ * @property string $available
  *
  * @property Collection|Order[] $orders
  *
@@ -39,7 +39,7 @@ class Table extends Model
 
 	protected $fillable = [
 		'quantity',
-		'state'
+		'available'
 	];
 
 	public function orders(): BelongsToMany

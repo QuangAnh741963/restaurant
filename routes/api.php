@@ -4,11 +4,11 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ExtraItemController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TableController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +36,7 @@ Route::apiResource('/customer', CustomerController::class);
 Route::apiResource('/restaurant', RestaurantController::class);
 
 Route::apiResource('/order', OrderController::class);
+
+Route::get('/payment/{order_id}', [PaymentController::class, 'showBill']);
+Route::get('/payment/hoa_don_do/{order_id}', [PaymentController::class, 'showBill_HoaDonDo']);
+

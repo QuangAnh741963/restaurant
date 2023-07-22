@@ -15,7 +15,7 @@ class OrderStateSeeder extends Seeder
     {
         $states = [
             'START',
-            'PREPARATION',
+            'SUCCESS',
             'PAYMENT',
             'DONE'
         ];

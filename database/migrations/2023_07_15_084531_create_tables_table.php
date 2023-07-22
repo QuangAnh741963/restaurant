@@ -17,7 +17,7 @@ return new class extends Migration
             $table->comment('Danh sách các bàn trong nhà hàng');
             $table->string('id', 10)->primary()->comment('Mã bàn');
             $table->integer('quantity')->comment('Số lượng người của mỗi bàn');
-            $table->string('state', 10);
+            $table->boolean('available')->comment('true: bàn sẵn sàng được dùng');
         });
     }
 
