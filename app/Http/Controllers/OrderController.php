@@ -62,47 +62,56 @@ class OrderController extends Controller
 
 
         // Check table is available
-        foreach ($tables as $table_id) {
-            $table = Table::findOrFail($table_id);
-            if (!$table->available) {
-                return response()->json([
-                    'message' => 'Tables are used'
-                ], 404);
+        if($tables) {
+            foreach ($tables as $table_id) {
+                $table = Table::findOrFail($table_id);
+                if (!$table->available) {
+                    return response()->json([
+                        'message' => 'Tables are used'
+                    ], 404);
+                }
+            }
+
+            // Save Order
+            $order->save();
+
+            $order->tables()->attach($tables);
+
+            $order->tables->each(function ($table) {
+                $table->available = false;
+                $table->save();
+            });
+        }
+
+        // Item
+        if($items) {
+            foreach ($items as $item) {
+                $order->items()->attach(
+                    [$item['id'] => ['quantity' => $item['quantity']]]
+                );
             }
         }
 
-        // Save Order
-        $order->save();
-
-        $order->tables()->attach($tables);
-
-        $order->tables->each(function ($table) {
-           $table->available = false;
-           $table->save();
-        });
-
-        // Item
-        foreach ($items as $item) {
-            $order->items()->attach(
-                [$item['id'] => ['quantity' => $item['quantity']]]
-            );
-        }
-
         // Extra_Item
-        foreach ($extra_items as $extra_item) {
-            $order->extra_items()->attach(
-                [$extra_item['id'] => ['quantity_start' => $extra_item['quantity_start'],
-                                        'quantity_not_use' => 0]]
-            );
+        if($extra_items) {
+            foreach ($extra_items as $extra_item) {
+                $order->extra_items()->attach(
+                    [$extra_item['id'] => ['quantity_start' => $extra_item['quantity_start'],
+                        'quantity_not_use' => 0]]
+                );
+            }
         }
 
         // Customer
-        $customer = Customer::firstOrCreate(
-            ['email' => $customer['email']],
-            ['name' => $customer['name'], 'phone' => $customer['phone']]
-        );
+        if($customer) {
+            $customer = Customer::firstOrCreate(
+                ['email' => $customer['email']],
+                ['name' => $customer['name'], 'phone' => $customer['phone']]
+            );
 
-        $order->customer()->associate($customer);
+            $order->customer()->associate($customer);
+        }
+        $order->save();
 
         return $order;
     }
@@ -113,7 +122,7 @@ class OrderController extends Controller
     public function show(string $id)
     {
         try {
-            $order = Order::findOrFail($id)->with(['tables'])->get();
+            $order = Order::findOrFail($id);
             return $this->success('', $order);
         } catch (Exception $exception) {
             if($exception instanceof ModelNotFoundException) {
@@ -144,12 +153,15 @@ class OrderController extends Controller
             // Update Item
             $items = $request->has('items') ? $request->get('items') : null;
             if ($items) {
+                $order->items()->detach(); // DELETE Exist Item
                 foreach ($items as $item) {
                     $order->items()->attach(
                         [$item['id'] => ['quantity' => $item['quantity']]]
                     );
                 }
             }
+
+
 
             // Update Extra Item
             $extra_items = $request->has('extra_items') ? $request->get('extra_items') : null;
@@ -199,6 +211,7 @@ class OrderController extends Controller
                     ['email' => $customer['email']],
                     ['name' => $customer['name'], 'phone' => $customer['phone']]
                 );
+
                 $order->customer()->associate($customer);
             }
 
@@ -214,11 +227,9 @@ class OrderController extends Controller
                     break;
             }
 
-            // Save
-            if($order->isDirty()) {
-                $order->save();
-                return $this->success('', $order);
-            }
+            $order->save();
+
+            $order->refresh();
 
             return $this->success('', $order);
         } catch (Exception $exception) {

@@ -19,10 +19,16 @@ class TableController extends Controller
     {
         $query = Table::query();
 
-        // Tìm kiếm theo state
+        // Find with available
         if ($request->has('available')) {
             $available = $request->get('available');
             $query->where('available', $available);
+        }
+
+        // Find with quantity
+        if ($request->has('quantity')) {
+            $quantity = $request->get('quantity');
+            $query->where('quantity', $quantity);
         }
 
         $tables = $query->get();
