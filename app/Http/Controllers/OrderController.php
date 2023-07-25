@@ -24,9 +24,11 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         try {
-            if ($request->has('table_id')) {
+            if ($request->has('table_id')) {        // Get Order by Id_Table
                 $order = $this->findOrderByTableId($request->get('table_id'));
-            } else {
+            } elseif ($request->has('Done_Order')) {    // Get Order Done
+                $order = Order::where('state_id', 4)->get();
+            } else {                                        // Get All (without Done)
                 $order = Order::where('state_id', '<>', 4)->get();
             }
             return $this->success('', $order);
@@ -53,13 +55,11 @@ class OrderController extends Controller
         // Request customer
         $customer = $request->has('customer') ? $request->get('customer') : null;
 
-
         $order = new Order();
 
         // Make ID
         $order->id = strtoupper(fake()->bothify('**********'));
         $order->order_state()->associate(OrderState::find(OrderStateEnum::START));
-
 
         // Check table is available
         if($tables) {
@@ -149,6 +149,13 @@ class OrderController extends Controller
             if ($state_id) {
                 $order->state_id = $state_id;
             }
+            // Set Table Available
+            if($state_id == 4) {
+                $order->tables->each(function ($table) {
+                    $table->available = true;
+                    $table->save();
+                });
+            }
 
             // Update Item
             $items = $request->has('items') ? $request->get('items') : null;
@@ -160,8 +167,6 @@ class OrderController extends Controller
                     );
                 }
             }
-
-
 
             // Update Extra Item
             $extra_items = $request->has('extra_items') ? $request->get('extra_items') : null;
@@ -179,19 +184,12 @@ class OrderController extends Controller
             // Update Table
             $tables = $request->has('tables') ? $request->get('tables') : null;
 
-            // chưa xử lý
-//            $allTablesInOrder = $order->tables;
-//            foreach ($allTablesInOrder as $table) {
-//                $table->available = true;
-//                $table->save();
-//            }
-
             if ($tables) {
                 // Update Table if available
                 $order->tables()->sync($tables);
                 // Update Table
                 $order->tables->each(function ($table) {
-                    $table->available = true;
+                    $table->available = false;
                     $table->save();
                 });
             }

@@ -32,7 +32,8 @@ class TableController extends Controller
         }
 
         $tables = $query->get();
-        return $this->success('Get all tables successfully.', $tables);
+        return $this->success('Get all tables successfully.', ["Info" => $tables,
+            "Total: " => $tables->count()]);
     }
 
 

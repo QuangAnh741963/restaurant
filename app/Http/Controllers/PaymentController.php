@@ -61,9 +61,7 @@ class PaymentController extends Controller
 
             // Check State_Id
             if($order->state_id != 3) {
-                return response()->json([
-                    'message' => 'Not yet time to pay'
-                ],422);
+                return "Not yet time to pay, need to update state: PAYMENT";
             }
 
             // Compute Item
@@ -83,7 +81,7 @@ class PaymentController extends Controller
                 $quantity_not_use = $extra_item->pivot->quantity_not_use;
 
                 $total_bill_extra_item += $extra_item['price']*(
-                    $quantity_start - $quantity_not_use
+                        $quantity_start - $quantity_not_use
                     );
             }
 

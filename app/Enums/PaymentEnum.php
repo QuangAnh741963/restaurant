@@ -6,6 +6,6 @@ use BenSampo\Enum\Enum;
 
 final class PaymentEnum extends Enum
 {
-    const CASH = 'cash';
-    const ONLINE_BANKING = 'online_banking';
+    const CASH = 'CASH';
+    const ONLINE_BANKING = 'ONLINE_BANKING';
 }

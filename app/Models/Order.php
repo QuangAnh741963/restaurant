@@ -55,7 +55,7 @@ class Order extends Model
 		'payment'
 	];
 
-    protected $with = ['tables', 'items', 'extra_items', 'customer'];
+    protected $with = ['tables', 'items', 'extra_items', 'customer', 'order_state'];
 
 	public function customer(): BelongsTo
     {
