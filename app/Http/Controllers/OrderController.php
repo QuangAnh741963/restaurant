@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
 class OrderController extends Controller
 {
@@ -20,6 +21,7 @@ class OrderController extends Controller
 
     /**
      * Display a listing of the resource.
+     *
      */
     public function index(Request $request)
     {
@@ -62,7 +64,7 @@ class OrderController extends Controller
         $order->order_state()->associate(OrderState::find(OrderStateEnum::START));
 
         // Check table is available
-        if($tables) {
+        if ($tables) {
             foreach ($tables as $table_id) {
                 $table = Table::findOrFail($table_id);
                 if (!$table->available) {
@@ -84,7 +86,7 @@ class OrderController extends Controller
         }
 
         // Item
-        if($items) {
+        if ($items) {
             foreach ($items as $item) {
                 $order->items()->attach(
                     [$item['id'] => ['quantity' => $item['quantity']]]
@@ -93,7 +95,7 @@ class OrderController extends Controller
         }
 
         // Extra_Item
-        if($extra_items) {
+        if ($extra_items) {
             foreach ($extra_items as $extra_item) {
                 $order->extra_items()->attach(
                     [$extra_item['id'] => ['quantity_start' => $extra_item['quantity_start'],
@@ -103,7 +105,7 @@ class OrderController extends Controller
         }
 
         // Customer
-        if($customer) {
+        if ($customer) {
             $customer = Customer::firstOrCreate(
                 ['email' => $customer['email']],
                 ['name' => $customer['name'], 'phone' => $customer['phone']]
@@ -125,9 +127,9 @@ class OrderController extends Controller
             $order = Order::findOrFail($id);
             return $this->success('', $order);
         } catch (Exception $exception) {
-            if($exception instanceof ModelNotFoundException) {
+            if ($exception instanceof ModelNotFoundException) {
                 return response()->json([
-                    'message' =>  'Order NOT FOUND'
+                    'message' => 'Order NOT FOUND'
                 ], 404);
             }
             return $this->failure($exception->getMessage());
@@ -137,6 +139,18 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+    #[OA\Get(
+        path: "order/{id}",
+        requestBody: new OA\RequestBody(
+
+        ),
+        responses: [
+            new OA\Response(
+
+            )
+        ]
+    )]
     public function update(Request $request, string $id)
     {
         try {
@@ -150,7 +164,7 @@ class OrderController extends Controller
                 $order->state_id = $state_id;
             }
             // Set Table Available
-            if($state_id == 4) {
+            if ($state_id == 4) {
                 $order->tables->each(function ($table) {
                     $table->available = true;
                     $table->save();
@@ -224,7 +238,7 @@ class OrderController extends Controller
             return $this->success('', $order);
         } catch (Exception $exception) {
             return response()->json([
-                'message' =>  'Order NOT FOUND'
+                'message' => 'Order NOT FOUND'
             ], 404);
         }
     }
@@ -247,7 +261,7 @@ class OrderController extends Controller
 
             return response()->json([
                 'message' => 'Delete Order Successfully'
-            ],200);
+            ], 200);
 
         } catch (ModelNotFoundException $exception) {
             return response()->json([
