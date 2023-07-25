@@ -27,7 +27,7 @@ class OrderController extends Controller
             if ($request->has('table_id')) {
                 $order = $this->findOrderByTableId($request->get('table_id'));
             } else {
-                $order = Order::all();
+                $order = Order::where('state_id', '<>', 4)->get();
             }
             return $this->success('', $order);
         } catch (Exception $exception) {
@@ -187,19 +187,11 @@ class OrderController extends Controller
 //            }
 
             if ($tables) {
-                foreach ($tables as $table_id) {
-                    $table = Table::findOrFail($table_id);
-                    if (!$table->available) {
-                        return response()->json([
-                            'message' => 'Tables are used'
-                        ], 404);
-                    }
-                }
                 // Update Table if available
                 $order->tables()->sync($tables);
                 // Update Table
                 $order->tables->each(function ($table) {
-                    $table->available = false;
+                    $table->available = true;
                     $table->save();
                 });
             }
