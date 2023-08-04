@@ -36,10 +36,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Order extends Model
 {
+    // Liên kết đến bảng orders
 	protected $table = 'orders';
+
+    // Khóa chính tự động tăng (auto increment)
 	public $incrementing = false;
+
+    // Có sử dụng cơ chế tự cập nhật thời gian hay không
 	public $timestamps = false;
 
+    // Khai báo kiểu dữ liệu
 	protected $casts = [
 		'state_id' => 'int',
 		'modified_at' => 'datetime',
@@ -47,6 +53,7 @@ class Order extends Model
 		'customer_id' => 'int'
 	];
 
+    // Các trường được dùng khi store hoặc update
 	protected $fillable = [
 		'state_id',
 		'modified_at',
@@ -55,6 +62,7 @@ class Order extends Model
 		'payment'
 	];
 
+    // Các mối quan hệ được tải lên (cho client) khi truy vấn
     protected $with = ['tables', 'items', 'extra_items', 'customer', 'order_state'];
 
 	public function customer(): BelongsTo
